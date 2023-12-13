@@ -1,0 +1,82 @@
+import os
+
+from PIL import Image, ImageOps
+
+PATH = r'photos'
+
+
+def get_list_obj_in_catalog(path:str) -> list:
+    return os.listdir(path)
+
+def get_list_img(path:str) -> list:
+    """Принимает путь и возвращает список изображений иэ каталога"""
+    list_img = []
+    for i in get_list_obj_in_catalog(path):
+        img = Image.open(path + f'\\{i}')
+        list_img.append(img)
+    return list_img
+
+
+def make_thumbnails(imgs: list[Image]) -> list:
+    """добавляет рамку и сооздает миниатюру приближенную к 900х650"""
+    list_img_with_thumb = []
+    for img in imgs:
+        dimensions = img.size
+        border = int(max(dimensions)/900 * 18)
+        img = ImageOps.expand(img, border=border, fill='#FFFFFF')
+        img.thumbnail((900, 650))
+        list_img_with_thumb.append(img)
+    return list_img_with_thumb
+
+
+
+class Collage:
+    MAX_LENGTH = 1300
+    def __init__(self):
+        self.photo_list = []
+
+    def occup_lenght(self):
+        occup_lenght = 0
+        if not self.photo_list:
+            return occup_lenght
+        for photo in self.photo_list:
+            occup_lenght += photo.size[1]
+        return occup_lenght
+
+    def get_free_space(self):
+        return self.MAX_LENGTH - self.occup_lenght()
+
+    def add_photo(self, obj:Image):
+        if (self.get_free_space() >= obj.size[1]) \
+                and ((self.occup_lenght() + obj.size[1]) <= self.MAX_LENGTH) :
+            self.photo_list.append(obj)
+            return True
+        return False
+
+    def __str__(self):
+        return f'Размер: {len(self.photo_list)} занято{self.occup_lenght()} '
+
+def create_collages():
+    collages_list = []
+    collage = Collage()
+    for img in make_thumbnails(get_list_img(PATH)):
+        if collage.add_photo(img):
+            continue
+        else:
+            collages_list.append(collage)
+            collage = Collage()
+            collage.add_photo(img)
+    return collages_list
+
+def show_collage():
+    number = 1
+    for i in create_collages():
+        img_1, img_2 = i.photo_list
+        new_img = Image.new('RGB', (900, 1300), (250,250,250))
+        new_img.paste(img_1, (0,0))
+        new_img.paste(img_2, (0, img_1.size[1]))
+        new_img.save(r'collages'+f'\\{number}.jpg')
+        number +=1
+
+
+show_collage()
