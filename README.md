@@ -10,12 +10,22 @@
 Как работает?
 
 1. Закидываем фотки в директорию photos
-2. Запускаем скриптик: python PhotoPatyBox.py
+2. Запускаем скриптик:
+   `python PhotoPatyBox.py`
 3. Забираем коллажи из директории collages (1 коллаж по 2 фото, каждое в рамке)
 
 Как Установить?
-1. Клонируем репозиторий: git cline  https://github.com/Badmajor/Photopartybox.git
-2. Устанавливаем виртуальное окружение: python -m venv venv
-3. Активируем виртуальное окружение: source venv\bin\activate
-4. Устанавливаем зависимости: pip install -r requirements.txt
-5. Создаем необходимые каталоги: mkdir photos collages
+1. Клонируем репозиторий:
+ `git cline  https://github.com/Badmajor/Photopartybox.git`
+ 
+2. Устанавливаем виртуальное окружение:
+ `python -m venv venv`
+   
+3. Активируем виртуальное окружение:
+ `source venv\bin\activate`
+   
+4. Устанавливаем зависимости:
+ `pip install -r requirements.txt`
+ 
+5. Создаем необходимые каталоги:
+ `mkdir photos collages`
